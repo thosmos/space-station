@@ -3,8 +3,8 @@ import { ChainInfo } from '@keplr-wallet/types';
 const gravityBridge: ChainInfo = {
   chainName: 'GravityBridge',
   chainId: 'gravity-bridge-3',
-  rest: 'https://lcd-gravity-bridge.cosmostation.io',
-  rpc: 'https://lcd-gravity-bridge.cosmostation.io:26657',
+  rest: 'https://gravity.api.chandrastation.com',
+  rpc: 'https://gravity.rpc.chandrastation.com:443',
   stakeCurrency: {
     coinDenom: 'GRAVITON',
     coinMinimalDenom: 'ugraviton',
@@ -36,9 +36,9 @@ const gravityBridge: ChainInfo = {
     }
   ],
   gasPriceStep: {
-    low: 0,
-    average: 0,
-    high: 0
+    low: 100000,
+    average: 1000000,
+    high: 100000000
   }
 };
 

@@ -5,7 +5,7 @@ import _ from 'lodash';
 const gravityBridge: CosmosChainInfo = {
   chainName: 'Gravity Bridge',
   chainId: 'gravity-bridge-3',
-  lcd: 'https://lcd-gravity-bridge.cosmostation.io',
+  lcd: 'https://gravity.api.chandrastation.com',
   bech32Prefix: 'gravity',
   path: [44, 118, 0, 0, 0],
   denom: 'ugraviton',
@@ -28,7 +28,7 @@ const gravityBridge: CosmosChainInfo = {
 const cosmos: CosmosChainInfo = {
   chainName: 'Cosmos',
   chainId: 'cosmoshub-4',
-  lcd: 'https://lcd-cosmos.cosmostation.io',
+  lcd: '-cosmos.cosmostation.io',
   bech32Prefix: 'cosmos',
   path: [44, 118, 0, 0, 0],
   denom: 'uatom',
