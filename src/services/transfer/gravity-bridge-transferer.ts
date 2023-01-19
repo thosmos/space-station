@@ -168,7 +168,7 @@ function getFees (fromChain: SupportedChain, token: IToken, tokenPrice: string):
   if (fromChain === SupportedChain.GravityBridge) {
     if (token.erc20) {
       const erc20Token = token.erc20;
-      return _.map([10, 200, 500], (usdFee, i) => ({
+      return _.map([6, 20, 100], (usdFee, i) => ({
         id: i,
         label: getFeeLabel(usdFee),
         denom: erc20Token.symbol,
@@ -177,7 +177,7 @@ function getFees (fromChain: SupportedChain, token: IToken, tokenPrice: string):
       }));
     } else if (token.cosmos) {
       const cosmosToken = token.cosmos;
-      return _.map([10, 200, 500], (usdFee, i) => ({
+      return _.map([6, 20, 100], (usdFee, i) => ({
         id: i,
         label: getFeeLabel(usdFee),
         denom: cosmosToken.symbol,
@@ -192,9 +192,9 @@ function getFees (fromChain: SupportedChain, token: IToken, tokenPrice: string):
 
 function getFeeLabel (usdFee: number): string {
   switch (usdFee) {
-    case 10: return 'Average 4 hours';
-    case 200: return 'Within an hour';
-    case 500: return 'Instantly';
+    case 6: return 'Average 4 hours';
+    case 20: return 'Within an hour';
+    case 100: return 'Instantly';
     default: return 'Unknown';
   }
 }

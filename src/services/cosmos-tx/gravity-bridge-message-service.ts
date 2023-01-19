@@ -21,12 +21,14 @@ function createSendToEthereumMessage (transfer: ITransfer): google.protobuf.Any 
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
   const coin = convertTokenToCoin(transfer.token, amount);
+  const chainFeeCoin = convertTokenToChainFeeCoin(transfer.token, feeAmount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
   const sendMessage = new gravity.v1.MsgSendToEth({
     sender: transfer.fromAddress,
     eth_dest: transfer.toAddress,
     amount: coin,
-    bridge_fee: feeCoin
+    bridge_fee: feeCoin,
+    chain_fee: chainFeeCoin
   });
   logger.info('[createSendToEthereumMessage] MsgSendToEth:', sendMessage);
 
@@ -50,6 +52,7 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
   const coin = convertTokenToCoin(transfer.token, amount);
+  const chainFeeCoin = convertTokenToChainFeeCoin(transfer.token, feeAmount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
   const message: AminoMsg = {
     type: 'gravity/MsgSendToEth',
@@ -57,7 +60,8 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
       sender: transfer.fromAddress,
       eth_dest: transfer.toAddress,
       amount: coin,
-      bridge_fee: feeCoin
+      bridge_fee: feeCoin,
+      chain_fee: chainFeeCoin
     }
   };
 
@@ -66,6 +70,24 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
 }
 
 function convertTokenToCoin (token: IToken, amount: string): cosmos.base.v1beta1.ICoin {
+  if (token.erc20) {
+    return {
+      denom: `gravity${token.erc20.address}`,
+      amount
+    };
+  } else if (token.cosmos) {
+    return {
+      denom: token.cosmos.denom,
+      amount
+    };
+  } else {
+    const errorMessage = 'No token info!';
+    logger.error('[convertTokenToCoin]', errorMessage);
+    throw new Error(errorMessage);
+  }
+}
+
+function convertTokenToChainFeeCoin (token: IToken, amount: string): cosmos.base.v1beta1.ICoin {
   if (token.erc20) {
     return {
       denom: `gravity${token.erc20.address}`,

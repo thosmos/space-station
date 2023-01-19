@@ -6832,6 +6832,9 @@ export namespace gravity {
 
             /** MsgSendToEth bridge_fee */
             bridge_fee?: (cosmos.base.v1beta1.ICoin|null);
+
+            /** MsgSendToEth bridge_fee */
+            chain_fee?: (cosmos.base.v1beta1.ICoin|null);
         }
 
         /** Represents a MsgSendToEth. */
@@ -6854,6 +6857,9 @@ export namespace gravity {
 
             /** MsgSendToEth bridge_fee. */
             public bridge_fee?: (cosmos.base.v1beta1.ICoin|null);
+
+            /** MsgSendToEth bridge_fee */
+            public chain_fee?: (cosmos.base.v1beta1.ICoin|null);
 
             /**
              * Encodes the specified MsgSendToEth message. Does not implicitly {@link gravity.v1.MsgSendToEth.verify|verify} messages.

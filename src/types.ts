@@ -240,6 +240,14 @@ export interface BridgeFee {
   amountInCurrency: string;
 }
 
+export interface ChainFee {
+  id: number;
+  label: string;
+  denom: string;
+  amount: string;
+  amountInCurrency: string;
+}
+
 export interface ITransfer {
   fromChain: SupportedChain,
   toChain: SupportedChain,
@@ -250,6 +258,7 @@ export interface ITransfer {
   feeAmount?: string,
   memo?: string,
   bridgeFee?: BridgeFee
+  chainFee?: ChainFee
 }
 
 export type ChainViewInfo = {
