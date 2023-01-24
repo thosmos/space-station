@@ -9,7 +9,6 @@ pbjs -t static-module -w commonjs -o src/constants/proto.js \
   node_modules/protobufjs/google/protobuf/*.proto \
   $GRAVITY_REPO_PATH/proto/gravity/v1/*.proto \
   $GRAVITY_REPO_PATH/third_party/proto/cosmos/bank/v1beta1/*.proto \
-  $GRAVITY_REPO_PATH/third_party/proto/cosmos/tx/v1beta1/*.proto \
   $GRAVITY_REPO_PATH/third_party/proto/cosmos/base/v1beta1/*.proto \
   $GRAVITY_REPO_PATH/third_party/proto/cosmos/base/abci/v1beta1/*.proto \
   $GRAVITY_REPO_PATH/third_party/proto/cosmos/base/query/v1beta1/*.proto \
