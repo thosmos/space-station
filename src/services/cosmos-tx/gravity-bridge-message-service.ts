@@ -1,9 +1,9 @@
 import Big from 'big.js';
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
-import { gravity } from 'constants/gravity-bridge-v1.2.1';
+import { cosmos, google, gravity } from 'constants/proto';
 import loggerFactory from 'services/util/logger-factory';
 import { IToken, ITransfer } from 'types';
 import { AminoMsg } from '@cosmjs/amino';
+import Long from 'long';
 
 const logger = loggerFactory.getLogger('[GravityBridgeMessageService]');
 
@@ -20,18 +20,14 @@ function createSendToEthereumMessage (transfer: ITransfer): google.protobuf.Any 
   const feeAmount = transfer.bridgeFee
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
-  const chainFeeAmount = transfer.chainFee
-    ? new Big(transfer.chainFee?.amount).times(decimal).toString()
-    : '0';
   const coin = convertTokenToCoin(transfer.token, amount);
-  const chainFeeCoin = convertTokenToCoin(transfer.token, chainFeeAmount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
   const sendMessage = new gravity.v1.MsgSendToEth({
     sender: transfer.fromAddress,
     ethDest: transfer.toAddress,
     amount: coin,
     bridgeFee: feeCoin,
-    chainFee: chainFeeCoin
+    chainFee: transfer.chainFee
   });
   logger.info('[createSendToEthereumMessage] MsgSendToEth:', sendMessage);
 
@@ -54,11 +50,7 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
   const feeAmount = transfer.bridgeFee
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
-  const chainFeeAmount = transfer.chainFee
-    ? new Big(transfer.chainFee?.amount).times(decimal).toString()
-    : '0';
   const coin = convertTokenToCoin(transfer.token, amount);
-  const chainFeeCoin = convertTokenToCoin(transfer.token, chainFeeAmount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
   const message: AminoMsg = {
     type: 'gravity/MsgSendToEth',
@@ -67,7 +59,7 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
       eth_dest: transfer.toAddress,
       amount: coin,
       bridge_fee: feeCoin,
-      chain_fee: chainFeeCoin
+      chain_fee: transfer.chainFee
     }
   };
 

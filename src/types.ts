@@ -3,7 +3,6 @@ import { DirectSignResponse } from '@cosmjs/proto-signing';
 import { cosmos, google } from 'constants/cosmos-v0.44.5';
 import { EventEmitter } from 'events';
 import Long from 'long';
-import { off } from 'process';
 import Web3Manager from 'services/eth-wallet/web3-manager';
 import { AbstractProvider, RequestArguments } from 'web3-core';
 import { ContractSendMethod } from 'web3-eth-contract';
