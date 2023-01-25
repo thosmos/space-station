@@ -1,9 +1,9 @@
 import { AminoSignResponse, StdSignDoc, AminoMsg } from '@cosmjs/amino';
 import { DirectSignResponse } from '@cosmjs/proto-signing';
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
+import { gravity } from 'constants/gravity-bridge-v1.2.1(deprecated)';
+import { cosmos, google } from 'constants/proto';
 import { EventEmitter } from 'events';
 import Long from 'long';
-import { off } from 'process';
 import Web3Manager from 'services/eth-wallet/web3-manager';
 import { AbstractProvider, RequestArguments } from 'web3-core';
 import { ContractSendMethod } from 'web3-eth-contract';
@@ -19,6 +19,7 @@ export enum SupportedChain {
   Osmosis = 'osmosis',
   Stargaze = 'stargaze',
   Cosmos = 'cosmos',
+  Canto = 'canto',
   Cheqd = 'cheqd',
   Iris = 'iris',
   Chihuahua = 'chihuahua',
@@ -38,6 +39,7 @@ export enum SupportedCosmosChain {
   Osmosis = 'osmosis',
   Stargaze = 'stargaze',
   Cosmos = 'cosmos',
+  Canto = 'canto',
   Cheqd = 'cheqd',
   Iris = 'iris',
   Chihuahua = 'chihuahua',
@@ -240,6 +242,14 @@ export interface BridgeFee {
   amountInCurrency: string;
 }
 
+export interface ChainFee {
+  id: number;
+  label: string;
+  denom: string;
+  amount: string;
+  amountInCurrency: string;
+}
+
 export interface ITransfer {
   fromChain: SupportedChain,
   toChain: SupportedChain,
@@ -250,6 +260,7 @@ export interface ITransfer {
   feeAmount?: string,
   memo?: string,
   bridgeFee?: BridgeFee
+  chainFee?: ChainFee
 }
 
 export type ChainViewInfo = {

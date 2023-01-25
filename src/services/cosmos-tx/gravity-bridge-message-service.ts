@@ -1,9 +1,9 @@
 import Big from 'big.js';
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
-import { gravity } from 'constants/gravity-bridge-v1.2.1';
+import { cosmos, google, gravity } from 'constants/proto';
 import loggerFactory from 'services/util/logger-factory';
 import { IToken, ITransfer } from 'types';
 import { AminoMsg } from '@cosmjs/amino';
+import Long from 'long';
 
 const logger = loggerFactory.getLogger('[GravityBridgeMessageService]');
 
@@ -20,13 +20,16 @@ function createSendToEthereumMessage (transfer: ITransfer): google.protobuf.Any 
   const feeAmount = transfer.bridgeFee
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
+  const chainFeeAmount = '2000';
   const coin = convertTokenToCoin(transfer.token, amount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
+  const chainFeeCoin = convertTokenToCoin(transfer.token, chainFeeAmount);
   const sendMessage = new gravity.v1.MsgSendToEth({
     sender: transfer.fromAddress,
-    eth_dest: transfer.toAddress,
+    ethDest: transfer.toAddress,
     amount: coin,
-    bridge_fee: feeCoin
+    bridgeFee: feeCoin,
+    chainFee: chainFeeCoin
   });
   logger.info('[createSendToEthereumMessage] MsgSendToEth:', sendMessage);
 
@@ -49,15 +52,18 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
   const feeAmount = transfer.bridgeFee
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
+  const chainFeeAmount = '2000';
   const coin = convertTokenToCoin(transfer.token, amount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
+  const chainFeeCoin = convertTokenToCoin(transfer.token, chainFeeAmount);
   const message: AminoMsg = {
     type: 'gravity/MsgSendToEth',
     value: {
       sender: transfer.fromAddress,
       eth_dest: transfer.toAddress,
       amount: coin,
-      bridge_fee: feeCoin
+      bridge_fee: feeCoin,
+      chain_fee: chainFeeCoin
     }
   };
 

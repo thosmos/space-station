@@ -18,7 +18,9 @@ import crescentToGravityBridgeTokens from 'constants/tokens/crescent-gb-tokens.j
 import gravityBridgeToSecretTokens from 'constants/tokens/gb-secret-tokens.json';
 import secretToGravityBridgeTokens from 'constants/tokens/secret-gb-tokens.json';
 import gravityBridgeToEvmosTokens from 'constants/tokens/gb-evmos-tokens';
+import gravityBridgeToCantoTokens from 'constants/tokens/gb-canto-tokens';
 import evmosToGravityBridgeTokens from 'constants/tokens/evmos-gb-tokens';
+import cantoToGravityBridgeTokens from 'constants/tokens/canto-gb-tokens';
 import gravityBridgeToUnificationTokens from 'constants/tokens/gb-unification-tokens';
 import unificationToGravityBridgeTokens from 'constants/tokens/unification-gb-tokens';
 import { SupportedChain } from 'types';
@@ -45,6 +47,7 @@ export const ibcTokenFromToMap: Record<SupportedChain, { [key in SupportedChain]
     [SupportedChain.Crescent]: gravityBridgeToCrescentTokens,
     [SupportedChain.Secret]: gravityBridgeToSecretTokens,
     [SupportedChain.Evmos]: gravityBridgeToEvmosTokens,
+    [SupportedChain.Canto]: gravityBridgeToCantoTokens,
     [SupportedChain.Unification]: gravityBridgeToUnificationTokens
   },
   [SupportedChain.Stargaze]: {
@@ -76,6 +79,9 @@ export const ibcTokenFromToMap: Record<SupportedChain, { [key in SupportedChain]
   },
   [SupportedChain.Evmos]: {
     [SupportedChain.GravityBridge]: evmosToGravityBridgeTokens
+  },
+  [SupportedChain.Canto]: {
+    [SupportedChain.GravityBridge]: cantoToGravityBridgeTokens
   },
   [SupportedChain.Unification]: {
     [SupportedChain.GravityBridge]: unificationToGravityBridgeTokens

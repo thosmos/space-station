@@ -1,5 +1,5 @@
 import { AminoMsg, AminoSignResponse, StdFee, StdSignDoc, makeSignDoc } from '@cosmjs/amino';
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
+import { cosmos, google } from 'constants/proto';
 
 import { DirectSignResponse } from '@cosmjs/proto-signing';
 import Long from 'long';
@@ -22,6 +22,9 @@ function getAuthInfo (
   const publicKeyProto = new cosmos.crypto.secp256k1.PubKey({ key: publicKey });
   let typeUrl = '/cosmos.crypto.secp256k1.PubKey';
   if (chain === SupportedCosmosChain.Evmos) {
+    typeUrl = '/ethermint.crypto.v1.ethsecp256k1.PubKey';
+  }
+  if (chain === SupportedCosmosChain.Canto) {
     typeUrl = '/ethermint.crypto.v1.ethsecp256k1.PubKey';
   }
   const signerInfo = new cosmos.tx.v1beta1.SignerInfo({

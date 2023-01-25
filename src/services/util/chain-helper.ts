@@ -13,6 +13,7 @@ const nameMap: Record<SupportedChain, string> = {
   [SupportedChain.Crescent]: 'Crescent',
   [SupportedChain.Secret]: 'Secret',
   [SupportedChain.Evmos]: 'Evmos',
+  [SupportedChain.Canto]: 'Canto',
   [SupportedChain.Unification]: 'Unification'
 };
 
@@ -29,6 +30,7 @@ const txLinkMap: Record<SupportedChain, string> = {
   [SupportedChain.Crescent]: 'https://www.mintscan.io/crescent/txs',
   [SupportedChain.Secret]: 'https://www.mintscan.io/secret/txs',
   [SupportedChain.Evmos]: 'https://www.mintscan.io/evmos/txs',
+  [SupportedChain.Canto]: 'https://apollo.chandrastaton.com/canto',
   [SupportedChain.Unification]: 'https://explorer.unification.io/transactions'
 };
 
@@ -45,6 +47,7 @@ const accountLinkMap: Record<SupportedChain, string> = {
   [SupportedChain.Crescent]: 'https://www.mintscan.io/crescent/account',
   [SupportedChain.Secret]: 'https://www.mintscan.io/secret/account',
   [SupportedChain.Evmos]: 'https://www.mintscan.io/evmos/account',
+  [SupportedChain.Canto]: 'https://apollo.chandrastaton.com/canto',
   [SupportedChain.Unification]: 'https://explorer.unification.io/accounts'
 };
 
@@ -60,6 +63,7 @@ const broadcastSourceMap: Record<SupportedCosmosChain, BroadcastSource> = {
   [SupportedChain.Crescent]: BroadcastSource.Lcd,
   [SupportedChain.Secret]: BroadcastSource.Lcd,
   [SupportedChain.Evmos]: BroadcastSource.Lcd,
+  [SupportedChain.Canto]: BroadcastSource.Lcd,
   [SupportedChain.Unification]: BroadcastSource.Lcd
 };
 

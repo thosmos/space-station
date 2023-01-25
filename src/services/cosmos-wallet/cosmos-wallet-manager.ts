@@ -8,7 +8,7 @@ import {
   SupportedCosmosChain,
 } from 'types';
 import { AminoMsg, AminoSignResponse } from '@cosmjs/amino';
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
+import { cosmos, google } from 'constants/proto';
 
 import { DirectSignResponse } from '@cosmjs/proto-signing';
 import Long from 'long';
@@ -46,6 +46,7 @@ const chainWalletTypeMap: Record<SupportedCosmosChain, CosmosWalletType | undefi
   [SupportedCosmosChain.Crescent]: undefined,
   [SupportedCosmosChain.Secret]: undefined,
   [SupportedCosmosChain.Evmos]: undefined,
+  [SupportedCosmosChain.Canto]: undefined,
   [SupportedCosmosChain.Unification]: undefined
 };
 
@@ -61,6 +62,7 @@ const chainWalletMap: Record<SupportedCosmosChain, ICosmosWallet | undefined> = 
   [SupportedCosmosChain.Crescent]: undefined,
   [SupportedCosmosChain.Secret]: undefined,
   [SupportedCosmosChain.Evmos]: undefined,
+  [SupportedCosmosChain.Canto]: undefined,
   [SupportedCosmosChain.Unification]: undefined
 };
 

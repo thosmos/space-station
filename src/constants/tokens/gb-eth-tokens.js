@@ -2,6 +2,7 @@ import CheqdChainLogo from 'images/cheqd-chain-logo.png';
 import ChihuahuaChainLogo from 'images/chihuahua-chain-logo.png';
 import NymLogo from 'images/nym-icon.png';
 import EvmosLogo from 'images/evmos-logo.png';
+import CantoLogo from 'images/canto-logo.png';
 import UnificationLogo from 'images/unification-logo.png';
 
 export default {
@@ -92,6 +93,14 @@ export default {
     decimals: 18,
     logoURI: EvmosLogo,
     priceDenom: 'aevmos'
+  },
+  'ibc/0000000003': {
+    name: 'Canto',
+    denom: 'ibc/0000000003',
+    symbol: 'CANTO',
+    decimals: 18,
+    logoURI: CantoLogo,
+    priceDenom: 'acanto'
   },
   'ibc/D157AD8A50DAB0FC4EB95BBE1D9407A590FA2CDEE04C90A76C005089BF76E519': {
     name: 'Unification',

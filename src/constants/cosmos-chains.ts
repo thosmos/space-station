@@ -20,6 +20,7 @@ const gravityBridge: CosmosChainInfo = {
     [SupportedCosmosChain.Crescent]: 'channel-62',
     [SupportedCosmosChain.Secret]: 'channel-79',
     [SupportedCosmosChain.Evmos]: 'channel-65',
+    [SupportedCosmosChain.Canto]: 'channel-88',
     [SupportedCosmosChain.Unification]: 'channel-98'
   },
   supportZeroFee: true
@@ -155,6 +156,19 @@ const evmos: CosmosChainInfo = {
   supportZeroFee: false
 };
 
+const canto: CosmosChainInfo = {
+  chainName: 'Canto',
+  chainId: 'canto_7700-1',
+  lcd: 'https://canto.api.chandrastation.com',
+  bech32Prefix: 'canto',
+  path: [44, 118, 0, 0, 0],
+  denom: 'acanto',
+  ibcChannels: {
+    [SupportedCosmosChain.GravityBridge]: 'channel-0'
+  },
+  supportZeroFee: false
+};
+
 const unification: CosmosChainInfo = {
   chainName: 'Unification',
   chainId: 'FUND-MainNet-2',
@@ -180,6 +194,7 @@ const chainInfoMap: Record<SupportedCosmosChain, CosmosChainInfo> = {
   crescent,
   secret,
   evmos,
+  canto,
   unification
 };
 
