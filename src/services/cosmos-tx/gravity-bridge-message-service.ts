@@ -20,16 +20,15 @@ function createSendToEthereumMessage (transfer: ITransfer): google.protobuf.Any 
   const feeAmount = transfer.bridgeFee
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
-  const chainFeeAmount = '2000';
+  const chainFeeAmount = convertTokenTofee(transfer.token, amount, 0.0002);
   const coin = convertTokenToCoin(transfer.token, amount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
-  const chainFeeCoin = convertTokenToCoin(transfer.token, chainFeeAmount);
   const sendMessage = new gravity.v1.MsgSendToEth({
     sender: transfer.fromAddress,
     ethDest: transfer.toAddress,
     amount: coin,
     bridgeFee: feeCoin,
-    chainFee: chainFeeCoin
+    chainFee: chainFeeAmount
   });
   logger.info('[createSendToEthereumMessage] MsgSendToEth:', sendMessage);
 
@@ -52,10 +51,10 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
   const feeAmount = transfer.bridgeFee
     ? new Big(transfer.bridgeFee.amount).times(decimal).toString()
     : '0';
-  const chainFeeAmount = '2000';
+  /** Takes 2% of the amount being bridged to derive the chain Fee */
+  const chainFeeAmount = convertTokenTofee(transfer.token, amount, 0.0002);
   const coin = convertTokenToCoin(transfer.token, amount);
   const feeCoin = convertTokenToCoin(transfer.token, feeAmount);
-  const chainFeeCoin = convertTokenToCoin(transfer.token, chainFeeAmount);
   const message: AminoMsg = {
     type: 'gravity/MsgSendToEth',
     value: {
@@ -63,7 +62,7 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
       eth_dest: transfer.toAddress,
       amount: coin,
       bridge_fee: feeCoin,
-      chain_fee: chainFeeCoin
+      chain_fee: chainFeeAmount
     }
   };
 
@@ -72,6 +71,24 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
 }
 
 function convertTokenToCoin (token: IToken, amount: string): cosmos.base.v1beta1.ICoin {
+  if (token.erc20) {
+    return {
+      denom: `gravity${token.erc20.address}`,
+      amount
+    };
+  } else if (token.cosmos) {
+    return {
+      denom: token.cosmos.denom,
+      amount
+    };
+  } else {
+    const errorMessage = 'No token info!';
+    logger.error('[convertTokenToCoin]', errorMessage);
+    throw new Error(errorMessage);
+  }
+}
+
+function convertTokenTofee (token: IToken, amount: string, scaleFactor: number): cosmos.base.v1beta1.ICoin {
   if (token.erc20) {
     return {
       denom: `gravity${token.erc20.address}`,
