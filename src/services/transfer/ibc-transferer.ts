@@ -1,5 +1,5 @@
 import Big from 'big.js';
-import { cosmos } from 'constants/cosmos-v0.44.5';
+import { cosmos } from 'constants/proto';
 import lcdService from 'services/cosmos-tx/cosmos-sdk-lcd-service';
 import cosmosTxService from 'services/cosmos-tx/cosmos-tx-service';
 import ibcMessageService from 'services/cosmos-tx/ibc-message-service';

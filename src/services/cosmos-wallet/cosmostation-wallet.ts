@@ -1,6 +1,6 @@
 import { AminoSignResponse, BroadcastMode, StdSignDoc } from '@cosmjs/launchpad';
 import { DirectSignResponse } from '@cosmjs/proto-signing';
-import { cosmos } from 'constants/cosmos-v0.44.5';
+import { cosmos } from 'constants/proto';
 import _ from 'lodash';
 import Long from 'long';
 import loggerFactory from 'services/util/logger-factory';

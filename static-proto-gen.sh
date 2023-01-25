@@ -1,7 +1,7 @@
 
 #!/bin/bash
 # path to the gravity bridge repo on your machine, this script must be run from inside the space-station repo at the top level
-GRAVITY_REPO_PATH=/Users/chalabi/Code/Cosmos/Gravity-Bridge/module
+GRAVITY_REPO_PATH=/Users/chalabi/Code/Cosmos/gravity-bridge/module
 # you will need to run npm install -g protobufjs-cli 
 
 # Generate a single monolotic file with all these protobufs 
@@ -23,3 +23,4 @@ pbjs -t static-module -w commonjs -o src/constants/proto.js \
 
 # compile typescript definitions for above monolithic file
 pbts -o src/constants/proto.d.ts src/constants/proto.js
+

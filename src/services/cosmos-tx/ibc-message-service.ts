@@ -1,5 +1,5 @@
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
 import { ibc } from 'constants/ibc-v2.0.3';
+import { cosmos, google } from 'constants/cosmos-v0.44.5';
 import Long from 'long';
 import loggerFactory from 'services/util/logger-factory';
 import { ICosmosToken } from 'types';

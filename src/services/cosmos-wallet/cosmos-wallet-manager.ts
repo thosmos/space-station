@@ -8,7 +8,7 @@ import {
   SupportedCosmosChain,
 } from 'types';
 import { AminoMsg, AminoSignResponse } from '@cosmjs/amino';
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
+import { cosmos, google } from 'constants/proto';
 
 import { DirectSignResponse } from '@cosmjs/proto-signing';
 import Long from 'long';

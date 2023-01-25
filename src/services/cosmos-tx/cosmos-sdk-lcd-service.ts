@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cosmosChains from 'constants/cosmos-chains';
-import { cosmos } from 'constants/cosmos-v0.44.5';
+import { cosmos } from 'constants/proto';
 import _ from 'lodash';
 import { SupportedCosmosChain } from 'types';
 

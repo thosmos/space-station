@@ -10,7 +10,7 @@ import {
 
 import Big from 'big.js';
 import _ from 'lodash';
-import { cosmos } from 'constants/cosmos-v0.44.5';
+import { cosmos } from 'constants/proto';
 import cosmosTxService from 'services/cosmos-tx/cosmos-tx-service';
 import cosmosWalletManager from 'services/cosmos-wallet/cosmos-wallet-manager';
 import ethWalletManger from 'services/eth-wallet/eth-wallet-manager';

@@ -1,6 +1,6 @@
 import { AminoSignResponse, StdSignDoc, serializeSignDoc } from '@cosmjs/amino';
 import { DirectSignResponse } from '@cosmjs/proto-signing';
-import { cosmos } from 'constants/cosmos-v0.44.5';
+import { cosmos } from 'constants/proto';
 import _ from 'lodash';
 import ledgerConnector from 'services/ledger-connector';
 import loggerFactory from 'services/util/logger-factory';

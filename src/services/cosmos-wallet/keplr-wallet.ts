@@ -1,7 +1,7 @@
 import { AminoSignResponse, BroadcastMode, StdSignDoc } from '@cosmjs/launchpad';
 import { DirectSignResponse } from '@cosmjs/proto-signing';
 import { Keplr, Window } from '@keplr-wallet/types';
-import { cosmos } from 'constants/cosmos-v0.44.5';
+import { cosmos } from 'constants/proto';
 import keplrChainInfo from 'constants/keplr-chain-info';
 import _ from 'lodash';
 import Long from 'long';

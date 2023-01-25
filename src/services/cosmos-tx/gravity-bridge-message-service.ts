@@ -27,7 +27,7 @@ function createSendToEthereumMessage (transfer: ITransfer): google.protobuf.Any 
     ethDest: transfer.toAddress,
     amount: coin,
     bridgeFee: feeCoin,
-    chainFee: transfer.chainFee
+    chainFee: feeCoin
   });
   logger.info('[createSendToEthereumMessage] MsgSendToEth:', sendMessage);
 
@@ -59,7 +59,7 @@ function createSendToEthereumAminoMessage (transfer: ITransfer): AminoMsg {
       eth_dest: transfer.toAddress,
       amount: coin,
       bridge_fee: feeCoin,
-      chain_fee: transfer.chainFee
+      chain_fee: feeCoin
     }
   };
 

@@ -1,6 +1,6 @@
 import { AminoSignResponse, StdSignDoc, AminoMsg } from '@cosmjs/amino';
 import { DirectSignResponse } from '@cosmjs/proto-signing';
-import { cosmos, google } from 'constants/cosmos-v0.44.5';
+import { cosmos, google } from 'constants/proto';
 import { EventEmitter } from 'events';
 import Long from 'long';
 import Web3Manager from 'services/eth-wallet/web3-manager';
