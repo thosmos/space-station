@@ -1,6 +1,7 @@
 import {
   BridgeFee,
   BroadcastSource,
+  ChainFee,
   IToken,
   ITransfer,
   SupportedChain,
