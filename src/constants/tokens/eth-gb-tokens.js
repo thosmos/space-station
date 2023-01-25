@@ -2,6 +2,7 @@ import CheqdChainLogo from 'images/cheqd-chain-logo.png';
 import ChihuahuaChainLogo from 'images/chihuahua-chain-logo.png';
 import NymLogo from 'images/nym-icon.png';
 import EvmosLogo from 'images/evmos-logo.png';
+import CantoLogo from 'images/canto-logo.png';
 import UnificationLogo from 'images/unification-logo.png';
 
 export default [
@@ -103,6 +104,15 @@ export default [
     decimals: 18,
     logoURI: EvmosLogo,
     priceDenom: 'aevmos'
+  },
+  {
+    chainId: '0x1',
+    address: '0xBF183E0d2f06872e10F5DBEc745999aDfcB5f000',
+    name: 'Canto',
+    symbol: 'CANTO',
+    decimals: 18,
+    logoURI: CantoLogo,
+    priceDenom: 'acanto'
   },
   {
     chainId: '0x1',

@@ -24,6 +24,7 @@ import CosmosChainLogo from 'images/cosmos-chain-logo.png';
 import CresecntChainLogo from 'images/cre-chain-logo.png';
 import EthChainLogo from 'images/eth-chain-logo.png';
 import EvmosChainLogo from 'images/evmos-chain-logo.png';
+import CantoChainLogo from 'images/canto-chain.png';
 import GbChainLogo from 'images/gb-chain-logo.png';
 import IconButton from 'components/IconButton';
 import IrisChainLogo from 'images/iris-chain-image.png';
@@ -86,6 +87,7 @@ const SUPPORTED_CHAIN_MAP: Record<SupportedChain, ChainViewInfo> = {
       SupportedChain.Crescent,
       SupportedChain.Secret,
       SupportedChain.Evmos,
+      SupportedChain.Canto,
       SupportedChain.Unification
     ],
     head: 8,
@@ -203,6 +205,18 @@ const SUPPORTED_CHAIN_MAP: Record<SupportedChain, ChainViewInfo> = {
     chain: SupportedChain.Evmos,
     name: 'Evmos',
     image: EvmosChainLogo,
+    supportedWallets: [
+      CosmosWalletType.Keplr,
+      CosmosWalletType.Cosmostation
+    ],
+    toChains: [SupportedChain.GravityBridge],
+    head: 8,
+    tail: 8
+  },
+  [SupportedChain.Canto]: {
+    chain: SupportedChain.Canto,
+    name: 'Canto',
+    image: CantoChainLogo,
     supportedWallets: [
       CosmosWalletType.Keplr,
       CosmosWalletType.Cosmostation

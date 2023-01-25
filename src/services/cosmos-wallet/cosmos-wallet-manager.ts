@@ -46,6 +46,7 @@ const chainWalletTypeMap: Record<SupportedCosmosChain, CosmosWalletType | undefi
   [SupportedCosmosChain.Crescent]: undefined,
   [SupportedCosmosChain.Secret]: undefined,
   [SupportedCosmosChain.Evmos]: undefined,
+  [SupportedCosmosChain.Canto]: undefined,
   [SupportedCosmosChain.Unification]: undefined
 };
 
@@ -61,6 +62,7 @@ const chainWalletMap: Record<SupportedCosmosChain, ICosmosWallet | undefined> = 
   [SupportedCosmosChain.Crescent]: undefined,
   [SupportedCosmosChain.Secret]: undefined,
   [SupportedCosmosChain.Evmos]: undefined,
+  [SupportedCosmosChain.Canto]: undefined,
   [SupportedCosmosChain.Unification]: undefined
 };
 

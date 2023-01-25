@@ -320,6 +320,52 @@ const evmos: ChainInfo = {
   features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go']
 };
 
+const canto: ChainInfo = {
+  chainId: 'canto_7700-1',
+  chainName: 'Canto',
+  rpc: 'https://canto.rpc.chandrastation.com:443',
+  rest: 'https://canto.api.chandrastation.com',
+  stakeCurrency: {
+    coinDenom: 'CANTO',
+    coinMinimalDenom: 'acanto',
+    coinDecimals: 18,
+    coinGeckoId: 'canto'
+  },
+  bip44: {
+    coinType: 60
+  },
+  bech32Config: {
+    bech32PrefixAccAddr: 'canto',
+    bech32PrefixAccPub: 'cantopub',
+    bech32PrefixValAddr: 'cantovaloper',
+    bech32PrefixValPub: 'cantovaloperpub',
+    bech32PrefixConsAddr: 'cantovalcons',
+    bech32PrefixConsPub: 'cantovalconspub'
+  },
+  currencies: [
+    {
+      coinDenom: 'Canto',
+      coinMinimalDenom: 'acanto',
+      coinDecimals: 18,
+      coinGeckoId: 'canto'
+    }
+  ],
+  feeCurrencies: [
+    {
+      coinDenom: 'Canto',
+      coinMinimalDenom: 'acanto',
+      coinDecimals: 18,
+      coinGeckoId: 'canto'
+    }
+  ],
+  gasPriceStep: {
+    low: 25000000000,
+    average: 25000000000,
+    high: 40000000000
+  },
+  features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go']
+};
+
 const unification: ChainInfo = {
   chainId: 'FUND-MainNet-2',
   chainName: 'Unification',

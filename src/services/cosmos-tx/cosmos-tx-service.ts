@@ -24,6 +24,9 @@ function getAuthInfo (
   if (chain === SupportedCosmosChain.Evmos) {
     typeUrl = '/ethermint.crypto.v1.ethsecp256k1.PubKey';
   }
+  if (chain === SupportedCosmosChain.Canto) {
+    typeUrl = '/ethermint.crypto.v1.ethsecp256k1.PubKey';
+  }
   const signerInfo = new cosmos.tx.v1beta1.SignerInfo({
     public_key: new google.protobuf.Any({
       type_url: typeUrl,
