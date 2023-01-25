@@ -1,5 +1,6 @@
 import { AminoSignResponse, StdSignDoc, AminoMsg } from '@cosmjs/amino';
 import { DirectSignResponse } from '@cosmjs/proto-signing';
+import { gravity } from 'constants/gravity-bridge-v1.2.1(deprecated)';
 import { cosmos, google } from 'constants/proto';
 import { EventEmitter } from 'events';
 import Long from 'long';
