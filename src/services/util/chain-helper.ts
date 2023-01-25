@@ -30,7 +30,7 @@ const txLinkMap: Record<SupportedChain, string> = {
   [SupportedChain.Crescent]: 'https://www.mintscan.io/crescent/txs',
   [SupportedChain.Secret]: 'https://www.mintscan.io/secret/txs',
   [SupportedChain.Evmos]: 'https://www.mintscan.io/evmos/txs',
-  [SupportedChain.Canto]: 'https://apollo.chandrastaton.com/canto',
+  [SupportedChain.Canto]: 'https://apollo.chandrastaton.com/canto/tx',
   [SupportedChain.Unification]: 'https://explorer.unification.io/transactions'
 };
 
@@ -47,7 +47,7 @@ const accountLinkMap: Record<SupportedChain, string> = {
   [SupportedChain.Crescent]: 'https://www.mintscan.io/crescent/account',
   [SupportedChain.Secret]: 'https://www.mintscan.io/secret/account',
   [SupportedChain.Evmos]: 'https://www.mintscan.io/evmos/account',
-  [SupportedChain.Canto]: 'https://apollo.chandrastaton.com/canto',
+  [SupportedChain.Canto]: 'https://apollo.chandrastaton.com/canto/account',
   [SupportedChain.Unification]: 'https://explorer.unification.io/accounts'
 };
 
