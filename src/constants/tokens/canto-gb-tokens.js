@@ -1,7 +1,7 @@
 import CantoLogo from 'images/canto-logo.png';
 
 export default {
-  unym: {
+  acanto: {
     name: 'Canto',
     denom: 'acanto',
     symbol: 'CANTO',

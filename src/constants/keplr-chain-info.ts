@@ -313,9 +313,9 @@ const evmos: ChainInfo = {
     }
   ],
   gasPriceStep: {
-    low: 25000000000,
-    average: 25000000000,
-    high: 40000000000
+    low: 25000000,
+    average: 4000000,
+    high: 80000000
   },
   features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go']
 };
@@ -359,11 +359,11 @@ const canto: ChainInfo = {
     }
   ],
   gasPriceStep: {
-    low: 25000000000,
-    average: 25000000000,
-    high: 40000000000
+    low: 2000000000000,
+    average: 2000000000000,
+    high: 4000000000000
   },
-  features: ['stargate', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go']
+  features: ['eth-address-gen', 'eth-key-sign', 'ibc-transfer', 'no-legacy-stdTx', 'ibc-go']
 };
 
 const unification: ChainInfo = {
@@ -420,6 +420,7 @@ const chainInfoMap: Record<string, ChainInfo> = {
   crescent,
   secret,
   evmos,
+  canto,
   unification
 };
 
