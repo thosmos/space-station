@@ -7,7 +7,7 @@ import Row from 'components/Row';
 import Text from 'components/Text';
 import usePrice from 'hooks/use-price';
 import _ from 'lodash';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import transferer from 'services/transfer/transferer';
 import loggerFactory from 'services/util/logger-factory';
 import { BridgeFee, IToken, SupportedChain } from 'types';
@@ -35,10 +35,31 @@ function getPriceDenom (selectedToken: IToken): string {
 }
 
 const FeeSelector: React.FC<FeeSelectorProps> = ({ fromChain, toChain, selectedToken, currency, amount, balance, select, selectedFee }) => {
+  // eslint-disable-next-line
+  console.log('FeeSelector rendered');
   const priceDenom = getPriceDenom(selectedToken);
   const tokenPrice = usePrice(currency, priceDenom);
   const _tokenPrice = new Big(tokenPrice?.current_price || '1').toString();
-  const fees = transferer.getFees(fromChain, toChain, selectedToken, _tokenPrice);
+  const [fees, setFees] = useState<BridgeFee[]>([]);
+
+  useEffect(() => {
+    // eslint-disable-next-line
+    console.log('Fetching fees...');
+    const fetchFees = async (): Promise<void> => {
+      try {
+        const fetchedFees = await transferer.getFees(fromChain, toChain, selectedToken, _tokenPrice);
+        setFees(fetchedFees);
+        // eslint-disable-next-line
+        console.log('Fetched fees:', fetchedFees);
+      } catch (error) {
+        // eslint-disable-next-line
+        console.error('Error fetching fees:', error);
+      }
+    };
+
+    fetchFees();
+  }, [fromChain, toChain, selectedToken, _tokenPrice]);
+
   logger.info('denom:', priceDenom, 'Fees:', fees);
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import {
   SupportedEthChain,
 } from 'types';
 
+import { fetchTokenPriceData } from 'services/coinGeckoPrices';
 import Big from 'big.js';
 import _ from 'lodash';
 import { cosmos } from 'constants/proto';
@@ -18,6 +19,7 @@ import ethWalletManger from 'services/eth-wallet/eth-wallet-manager';
 import gravityBridgeMessageService from 'services/cosmos-tx/gravity-bridge-message-service';
 import loggerFactory from 'services/util/logger-factory';
 import typeHelper from 'services/util/type-helper';
+import axios from 'axios';
 
 const logger = loggerFactory.getLogger('[GravityBridgeTransferer]');
 
@@ -165,37 +167,61 @@ function isSendCosmosResponse (response: unknown): response is SendToCosmosRespo
   return (response as SendToCosmosResponse).transactionHash !== undefined;
 }
 
-function getFees (fromChain: SupportedChain, token: IToken, tokenPrice: string): BridgeFee[] {
+async function getGasPrices (): Promise<{ slow: number; fast: number; instant: number }> {
+  try {
+    const response = await axios.get('https://ethgasstation.info/api/ethgasAPI.json');
+    const { safeLow, fast, fastest } = response.data;
+    return {
+      slow: safeLow / 10,
+      fast: fast / 10,
+      instant: fastest / 10
+    };
+  } catch (error) {
+    throw new Error('Error fetching gas prices:');
+  }
+}
+
+async function getFees (fromChain: SupportedChain, token: IToken, tokenPrice: string): Promise<BridgeFee[]> {
   if (fromChain === SupportedChain.GravityBridge) {
+    const gasPrices = await getGasPrices();
+    const feeLevels = [gasPrices.slow, gasPrices.fast, gasPrices.instant];
+    const speedLabels: ('slow' | 'fast' | 'instant')[] = ['slow', 'fast', 'instant'];
+
     if (token.erc20) {
       const erc20Token = token.erc20;
-      return _.map([6, 20, 100], (usdFee, i) => ({
-        id: i,
-        label: getFeeLabel(usdFee),
-        denom: erc20Token.symbol,
-        amount: Big(usdFee).div(tokenPrice).round(6, Big.roundDown).toString(),
-        amountInCurrency: usdFee.toString()
-      }));
+      return feeLevels.map((gasPrice, i) => {
+        const usdFee = gasPrice * parseFloat(tokenPrice);
+        return {
+          id: i,
+          label: getFeeLabel(speedLabels[i], usdFee),
+          denom: erc20Token.symbol,
+          amount: Big(usdFee).div(tokenPrice).round(6, Big.roundDown).toString(),
+          amountInCurrency: usdFee.toString()
+        };
+      });
     } else if (token.cosmos) {
       const cosmosToken = token.cosmos;
-      return _.map([6, 20, 100], (usdFee, i) => ({
-        id: i,
-        label: getFeeLabel(usdFee),
-        denom: cosmosToken.symbol,
-        amount: Big(usdFee).div(tokenPrice).round(6, Big.roundDown).toString(),
-        amountInCurrency: usdFee.toString()
-      }));
+      return feeLevels.map((gasPrice, i) => {
+        const usdFee = gasPrice * parseFloat(tokenPrice);
+        return {
+          id: i,
+          label: getFeeLabel(speedLabels[i], usdFee),
+          denom: cosmosToken.symbol,
+          amount: Big(usdFee).div(tokenPrice).round(6, Big.roundDown).toString(),
+          amountInCurrency: usdFee.toString()
+        };
+      });
     }
   }
 
   return [];
 }
 
-function getFeeLabel (usdFee: number): string {
-  switch (usdFee) {
-    case 6: return 'Average 4 hours';
-    case 20: return 'Within an hour';
-    case 100: return 'Instantly';
+function getFeeLabel (speed: 'slow' | 'fast' | 'instant', usdFee: number): string {
+  switch (speed) {
+    case 'slow': return '4 hours';
+    case 'fast': return 'Within an hour';
+    case 'instant': return 'Instantly';
     default: return 'Unknown';
   }
 }
