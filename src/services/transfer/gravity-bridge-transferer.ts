@@ -166,18 +166,9 @@ function isSendCosmosResponse (response: unknown): response is SendToCosmosRespo
   return (response as SendToCosmosResponse).transactionHash !== undefined;
 }
 
-async function getGasPrices (): Promise<{ slow: number; fast: number; instant: number }> {
+async function getGasPrices(): Promise<{ slow: number; fast: number; instant: number }> {
   try {
-    const response = await axios.get('https://api.etherscan.io/api', {
-      params: {
-        module: 'gastracker',
-        action: 'gasoracle',
-        apikey: process.env.ETHERSCAN_API_KEY
-      },
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await axios.get(`https://api.etherscan.io/api?module=gastracker&action=gasoracle&apikey=${process.env.REACT_APP_ETHERSCAN_API_KEY}`);
     const { suggestBaseFee, SafeGasPrice, FastGasPrice } = response.data.result;
     const instantGasPrice = Math.round(Number(FastGasPrice) * 1.5);
     const slowestGasPrice = Math.round(Number(suggestBaseFee) - 10);
