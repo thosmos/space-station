@@ -175,7 +175,6 @@ async function getGasPrices (): Promise<{ slow: number; fast: number; instant: n
         apikey: process.env.ETHERSCAN_API_KEY
       },
       headers: {
-        'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
       }
     });
