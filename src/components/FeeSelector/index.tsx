@@ -5,12 +5,13 @@ import classNames from 'classnames';
 import Box from 'components/Box';
 import Row from 'components/Row';
 import Text from 'components/Text';
-import usePrice from 'hooks/use-price';
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import transferer from 'services/transfer/transferer';
 import loggerFactory from 'services/util/logger-factory';
 import { BridgeFee, IToken, SupportedChain } from 'types';
+
+import { fetchTokenPriceData } from 'services/oracle';
 
 const logger = loggerFactory.getLogger('[FeeSelector]');
 
@@ -35,30 +36,42 @@ function getPriceDenom (selectedToken: IToken): string {
 }
 
 const FeeSelector: React.FC<FeeSelectorProps> = ({ fromChain, toChain, selectedToken, currency, amount, balance, select, selectedFee }) => {
-  // eslint-disable-next-line
-  console.log('FeeSelector rendered');
   const priceDenom = getPriceDenom(selectedToken);
-  const tokenPrice = usePrice(currency, priceDenom);
-  const _tokenPrice = new Big(tokenPrice?.current_price || '1').toString();
+  const [newTokenPrice, setTokenPrice] = useState<string>('1');
   const [fees, setFees] = useState<BridgeFee[]>([]);
+  const [priceLoading, setPriceLoading] = useState<boolean>(true);
+  const [feesLoading, setFeesLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // eslint-disable-next-line
-    console.log('Fetching fees...');
-    const fetchFees = async (): Promise<void> => {
+    const fetchPriceAndFees = async (): Promise<void> => {
       try {
-        const fetchedFees = await transferer.getFees(fromChain, toChain, selectedToken, _tokenPrice);
+        // Fetch token price
+        setPriceLoading(true);
+        const tokenPriceData = await fetchTokenPriceData(selectedToken);
+        const newTokenPrice = tokenPriceData.price.toString();
+        setTokenPrice(newTokenPrice);
+        setPriceLoading(false);
+
+        // Fetch fees
+        setFeesLoading(true);
+        const fetchedFees = await transferer.getFees(fromChain, toChain, selectedToken, newTokenPrice);
         setFees(fetchedFees);
-        // eslint-disable-next-line
-        console.log('Fetched fees:', fetchedFees);
+        setFeesLoading(false);
       } catch (error) {
         // eslint-disable-next-line
-        console.error('Error fetching fees:', error);
+        console.error('Error fetching price and fees:', error);
       }
     };
 
-    fetchFees();
-  }, [fromChain, toChain, selectedToken, _tokenPrice]);
+    fetchPriceAndFees();
+
+    // Cleanup function
+    // eslint-disable-next-line
+    return () => {
+      setPriceLoading(true);
+      setFeesLoading(true);
+    };
+  }, [fromChain, toChain, selectedToken]);
 
   logger.info('denom:', priceDenom, 'Fees:', fees);
 
@@ -96,24 +109,31 @@ const FeeSelector: React.FC<FeeSelectorProps> = ({ fromChain, toChain, selectedT
       </Row>
       <Row depth={1}>
         <div className="fee-selector-button-container">
-          {_.map(fees, (fee, i) => (
-            <button
-              key={fee.id}
-              className={classNames('fee-selector-fee-button', { selected: fee.id === selectedFee?.id })}
-              onClick={onClickFee.bind(null, fee)}
-              disabled={disableds[i]}
-            >
-              <Text size="tiny" className="fee-button-text" muted={disableds[i]}>
-                {fee.label}
-              </Text>
-              <Text size="tiny" className="fee-button-text" muted={disableds[i]}>
-                {fee.amount} {_.upperCase(fee.denom)}
-              </Text>
-              <Text size="tiny" className="fee-button-text" muted>
-                ${fee.amountInCurrency}
-              </Text>
-          </button>
-          ))}
+          {
+          feesLoading
+            // eslint-disable-next-line
+            ? (
+              <div className="loader"></div>
+              ) : (
+                fees.map((fee, i) => (
+              <button
+                key={fee.id}
+                className={classNames('fee-selector-fee-button', { selected: fee.id === selectedFee?.id })}
+                onClick={onClickFee.bind(null, fee)}
+                disabled={disableds[i]}
+              >
+                <Text size="tiny" className="fee-button-text" muted={disableds[i]}>
+                  {fee.label}
+                </Text>
+                <Text size="tiny" className="fee-button-text" muted={disableds[i]}>
+                  {fee.amount} {_.upperCase(fee.denom)}
+                </Text>
+                <Text size="tiny" className="fee-button-text" muted>
+                  ${fee.amountInCurrency}
+                </Text>
+              </button>
+                ))
+              )}
         </div>
       </Row>
     </Box>

@@ -1,7 +1,6 @@
 import {
   BridgeFee,
   BroadcastSource,
-  ChainFee,
   IToken,
   ITransfer,
   SupportedChain,
@@ -9,7 +8,7 @@ import {
   SupportedEthChain,
 } from 'types';
 
-import { fetchTokenPriceData } from 'services/coinGeckoPrices';
+import { fetchTokenPriceData } from 'services/oracle';
 import Big from 'big.js';
 import _ from 'lodash';
 import { cosmos } from 'constants/proto';
@@ -169,57 +168,89 @@ function isSendCosmosResponse (response: unknown): response is SendToCosmosRespo
 
 async function getGasPrices (): Promise<{ slow: number; fast: number; instant: number }> {
   try {
-    const response = await axios.get('https://ethgasstation.info/api/ethgasAPI.json');
-    const { safeLow, fast, fastest } = response.data;
+    const response = await axios.get('https://api.etherscan.io/api', {
+      params: {
+        module: 'gastracker',
+        action: 'gasoracle',
+        apikey: process.env.ETHERSCAN_API_KEY
+      },
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json'
+      }
+    });
+    const { suggestBaseFee, SafeGasPrice, FastGasPrice } = response.data.result;
+    const instantGasPrice = Math.round(Number(FastGasPrice) * 1.5);
+    const slowestGasPrice = Math.round(Number(suggestBaseFee) - 10);
     return {
-      slow: safeLow / 10,
-      fast: fast / 10,
-      instant: fastest / 10
+      slow: slowestGasPrice,
+      fast: SafeGasPrice,
+      instant: instantGasPrice
     };
   } catch (error) {
     throw new Error('Error fetching gas prices:');
   }
 }
 
-async function getFees (fromChain: SupportedChain, token: IToken, tokenPrice: string): Promise<BridgeFee[]> {
+async function getFees (fromChain: SupportedChain, token: IToken): Promise<BridgeFee[]> {
   if (fromChain === SupportedChain.GravityBridge) {
-    const gasPrices = await getGasPrices();
-    const feeLevels = [gasPrices.slow, gasPrices.fast, gasPrices.instant];
-    const speedLabels: ('slow' | 'fast' | 'instant')[] = ['slow', 'fast', 'instant'];
+    try {
+      const gasPrices = await getGasPrices();
+      const feeLevels = [gasPrices.slow, gasPrices.fast, gasPrices.instant];
+      const speedLabels: ('slow' | 'fast' | 'instant')[] = ['slow', 'fast', 'instant'];
 
-    if (token.erc20) {
-      const erc20Token = token.erc20;
-      return feeLevels.map((gasPrice, i) => {
-        const usdFee = gasPrice * parseFloat(tokenPrice);
-        return {
-          id: i,
-          label: getFeeLabel(speedLabels[i], usdFee),
-          denom: erc20Token.symbol,
-          amount: Big(usdFee).div(tokenPrice).round(6, Big.roundDown).toString(),
-          amountInCurrency: usdFee.toString()
-        };
-      });
-    } else if (token.cosmos) {
-      const cosmosToken = token.cosmos;
-      return feeLevels.map((gasPrice, i) => {
-        const usdFee = gasPrice * parseFloat(tokenPrice);
-        return {
-          id: i,
-          label: getFeeLabel(speedLabels[i], usdFee),
-          denom: cosmosToken.symbol,
-          amount: Big(usdFee).div(tokenPrice).round(6, Big.roundDown).toString(),
-          amountInCurrency: usdFee.toString()
-        };
-      });
+      const tokenPriceData = await fetchTokenPriceData(token);
+      const tokenPrice = tokenPriceData.price;
+
+      const ethPriceResponse = await axios.get('https://beaconcha.in/api/v1/execution/gasnow');
+      const ethPrice = ethPriceResponse.data.data.priceUSD;
+
+      if (token.erc20) {
+        const erc20Token = token.erc20;
+        return feeLevels.map((gasPrice, i) => {
+          const usdFee = parseFloat((gasPrice * 585000 / 1e9 * ethPrice).toFixed(4));
+          if (isNaN(usdFee) || isNaN(tokenPrice)) {
+            throw new Error('Invalid usdFee or tokenPrice');
+          }
+          const tokenFee = Big(usdFee).div(tokenPrice).round(erc20Token.decimals, Big.roundDown).toFixed(4);
+          return {
+            id: i,
+            label: getFeeLabel(speedLabels[i]),
+            denom: erc20Token.symbol,
+            amount: tokenFee,
+            amountInCurrency: usdFee.toString()
+          };
+        });
+      } else if (token.cosmos) {
+        const cosmosToken = token.cosmos;
+        return feeLevels.map((gasPrice, i) => {
+          const usdFee = parseFloat((gasPrice * 585000 / 1e9 * ethPrice).toFixed(4));
+          if (isNaN(usdFee) || isNaN(tokenPrice)) {
+            throw new Error('Invalid usdFee or tokenPrice');
+          }
+          const tokenFee = Big(usdFee).div(tokenPrice).round(cosmosToken.decimals, Big.roundDown).toFixed(4);
+          return {
+            id: i,
+            label: getFeeLabel(speedLabels[i]),
+            denom: cosmosToken.symbol,
+            amount: tokenFee,
+            amountInCurrency: usdFee.toString()
+          };
+        });
+      }
+    } catch (error) {
+      // eslint-disable-next-line
+      console.error('Error fetching fees:', error);
+      throw error;
     }
   }
 
   return [];
 }
 
-function getFeeLabel (speed: 'slow' | 'fast' | 'instant', usdFee: number): string {
+function getFeeLabel (speed: 'slow' | 'fast' | 'instant'): string {
   switch (speed) {
-    case 'slow': return '4 hours';
+    case 'slow': return '24 Hours';
     case 'fast': return 'Within an hour';
     case 'instant': return 'Instantly';
     default: return 'Unknown';

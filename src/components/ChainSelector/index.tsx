@@ -40,14 +40,11 @@ import arrowIcon from 'images/arrow-icon.png';
 import classNames from 'classnames';
 import cosmosWalletManager from 'services/cosmos-wallet/cosmos-wallet-manager';
 import ethWalletManager from 'services/eth-wallet/eth-wallet-manager';
-import loggerFactory from 'services/util/logger-factory';
 import toastService from 'services/util/toast-service';
 import typeHelper from 'services/util/type-helper';
 import useAccount from 'hooks/use-account';
 import useConnectedWallet from 'hooks/use-connected-wallet';
 import walletHelper from 'services/util/wallet-helper';
-
-const logger = loggerFactory.getLogger('[ChainSelector]');
 
 type ChainSelectorProps = {
   fromChain: SupportedChain,
