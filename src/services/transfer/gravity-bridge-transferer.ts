@@ -182,6 +182,25 @@ async function getGasPrices (): Promise<{ slow: number; fast: number; instant: n
   }
 }
 
+async function getWETHPrice (): Promise<{ price: number }> {
+  try {
+    const response = await axios.get('https://info.gravitychain.io:9000/erc20_metadata');
+    const data = response.data;
+
+    const tokenData = data.find((item: any) => item.symbol === 'WETH');
+
+    if (!tokenData) {
+      throw new Error('WETH not found in the response');
+    }
+
+    return {
+      price: tokenData.exchange_rate / 1e6 // Convert to USD
+    };
+  } catch (error) {
+    throw new Error('Error fetching WETH price:');
+  }
+}
+
 async function getFees (fromChain: SupportedChain, token: IToken): Promise<BridgeFee[]> {
   if (fromChain === SupportedChain.GravityBridge) {
     try {
@@ -192,8 +211,8 @@ async function getFees (fromChain: SupportedChain, token: IToken): Promise<Bridg
       const tokenPriceData = await fetchTokenPriceData(token);
       const tokenPrice = tokenPriceData.price;
 
-      const ethPriceResponse = await axios.get('https://beaconcha.in/api/v1/execution/gasnow');
-      const ethPrice = ethPriceResponse.data.data.priceUSD;
+      const wethPriceData = await getWETHPrice();
+      const ethPrice = wethPriceData.price;
 
       if (token.erc20) {
         const erc20Token = token.erc20;
