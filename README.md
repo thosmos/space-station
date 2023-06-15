@@ -3,18 +3,18 @@
 **THIS IS THE MAIN BRANCH. THIS BRANCH IS DESIGNED TO ALLOW EASY DEPLOYMENTS**
 
 ## Overview
-Web application for bridging assets to & from Ethereum & Gravity Bridge. This is a fork of Space Station by Cosmostation, now maintained, managed and updated by Chanddra Station (so many stations). 
+Web application for bridging assets to & from Ethereum & Gravity Bridge. This is a fork of Space Station by Cosmostation, now maintained, managed and updated by Chandra Station (so many stations). 
 
 ## Deploy your own
 One of the main focuses of our fork is to allow any end user to fork the application and launch it locally so anyone can bridge assets easily regardless of if Chandra Stations front end is up.
 
-*1 Fork the repo
-*2 Enable Github Pages on your fork
-*3 Update the `package.json` file with your homepage address. It will be `https://<your_github_username>.gitthub.io/space-station`
-*4 Once you create a pull request and merge it the application will build and deploy itself to the endpoint above
+ 1) Fork the repo.
+ 2) Enable Github Pages on your fork. Go to `settings` -> `Pages` -> enable pages.
+ 3) Update [this line in](https://github.com/ChandraStation/space-station/blob/7944348287079d28369bd6d82907c6f293676775/package.json#L4) the `package.json` file with your homepage address. It will be `https://<your_github_username>.gitthub.io/space-station`.
+ 4) Once you create a pull request and merge or push your updates to the main branch of your fork the application will build and deploy itself to the endpoint above.
 
 ### Rate Limiting
-Your deployment will be heavily rate limited. We are pulling gas estimates from Ether Scan and token prices from either CoinGecko or Coin Maraket Cap in addition to the gravity chain api. The deployment managed by Chandra Station is less rate limited.
+Your deployment will be heavily rate limited. We are pulling gas estimates from Ether Scan and token prices from either CoinGecko or Coin Market Cap in addition to the gravity chain api. The deployment managed by Chandra Station is less rate limited.
 
 ## Gravity Bridge
 ### Contract Info
